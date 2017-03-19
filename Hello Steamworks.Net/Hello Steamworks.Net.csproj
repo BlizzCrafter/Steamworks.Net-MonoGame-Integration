@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0AB0B180-216B-46D4-B652-F2A7A4808C50}</ProjectGuid>
+    <ProjectGuid>{D6EE1EED-D900-4988-8473-7DC5342BB198}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Steamworks.Net_MonoGame_Integration</RootNamespace>
-    <AssemblyName>Steamworks.Net MonoGame Integration</AssemblyName>
+    <RootNamespace>Hello_Steamworks.Net</RootNamespace>
+    <AssemblyName>Hello Steamworks.Net</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
@@ -38,16 +38,6 @@
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Windows|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Windows\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;LINUX</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
@@ -68,13 +58,9 @@
       <HintPath>C:\Users\Marcel\Desktop\Steamworks.NET-Standalone_9.0.0\Windows-x86\Steamworks.NET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CSteamworks.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Steamworks.NET.dll" />
     <Content Include="steam_api.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -83,6 +69,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Icon.ico" />
+    <Content Include="CSteamworks.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="OpenTK.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
