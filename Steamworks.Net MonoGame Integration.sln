@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steamworks.Net MonoGame Int
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hello Steamworks.Net", "Hello Steamworks.Net\Hello Steamworks.Net.csproj", "{D6EE1EED-D900-4988-8473-7DC5342BB198}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{9722C4EB-66FC-4B35-A425-1D99E838FB77}"
+	ProjectSection(SolutionItems) = preProject
+		C:\Users\Marcel\Desktop\MonoGameSteamworksNet_03.jpg = C:\Users\Marcel\Desktop\MonoGameSteamworksNet_03.jpg
+		C:\Users\Marcel\Desktop\MonoGameSteamworksNet_05.jpg = C:\Users\Marcel\Desktop\MonoGameSteamworksNet_05.jpg
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
