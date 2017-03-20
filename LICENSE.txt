@@ -2,6 +2,7 @@ Licenses of:
 Steamworks.Net
 MonoGame
 Portions of MonoGame
+Steam Logo
 
 The MIT License (MIT)
 
@@ -113,3 +114,8 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+-------------------------------------------------------------------------------
+
+Steam Logo Copyright
+© 2016 Valve Corporation. Alle Rechte vorbehalten. Valve, das Valve-Logo, Half-Life, das Half-Life-Logo, das Lambda-Logo, Steam, das Steam-Logo, Team Fortress, das Team Fortress-Logo, Opposing Force, Day of Defeat, das Day of Defeat-Logo, Counter-Strike, das Counter-Strike-Logo, Source, das Source-Logo, Counter-Strike: Condition Zero, Portal, das Portal-Logo, Dota, das Dota 2-Logo und Defense of the Ancients sind Marken und /oder eingetragene Marken der Valve Corporation. Andere Marken sind Eigentum ihrer jeweiligen Inhaber.
