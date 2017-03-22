@@ -9,16 +9,16 @@ namespace Hello_Steamworks.Net
 {
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
 
-        SpriteFont Font;
+        private SpriteFont Font;
 
-        string 
+        private string 
             WelcomeMessage = "Error: Please start your Steam Client before you run this example!", 
             WelcomeNote = "- Press [Shift + Tab] to open the Steam Overlay -";
 
-        bool isSteamRunning = false;
+        private bool isSteamRunning = false;
 
         public Game1()
         {
