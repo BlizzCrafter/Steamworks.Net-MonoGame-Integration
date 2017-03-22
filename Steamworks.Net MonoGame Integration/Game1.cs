@@ -2,13 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
-
-//System.Drawing.Color is identical to Microsoft.Xna.Framework.Color
-//We want to use the one from the Microsoft.Xna.Framework
-using Color = Microsoft.Xna.Framework.Color;
 
 namespace Steamworks.Net_MonoGame_Integration
 {
@@ -81,7 +75,7 @@ namespace Steamworks.Net_MonoGame_Integration
                     if (ret)
                     {
                         Texture2D texture = new Texture2D(device, (int) width, (int) height, false, SurfaceFormat.Color);
-                        texture.SetData(RGBA, 0, rgba.Length);
+                        texture.SetData(rgba, 0, rgba.Length);
                         // Return the Texture2D with your Steam Avatar data.
                         return texture;
                     }
