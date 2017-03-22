@@ -8,7 +8,7 @@ This repo is for everyone who is about to integrate the Steamworks.Net.dll into 
 
 The following is required to successfully compile the solution:
 
-- MonoGame 3.5.1
+- MonoGame 3.6
 - [Steamworks.Net](https://github.com/rlabrecque/Steamworks.NET) Precompiled .dlls are included in this repo. They are targeting **Steam SDK 1.39** (Steamworks.Net 9.0.0)
 
 ### How To
