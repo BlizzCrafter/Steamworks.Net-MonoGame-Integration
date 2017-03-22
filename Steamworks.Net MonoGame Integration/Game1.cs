@@ -58,50 +58,32 @@ namespace Steamworks.Net_MonoGame_Integration
         Texture2D UserAvatar;
 
         /// <summary>
-        /// Get your steam avatar -> Note: this method needs the System.Drawing namespace!
+        /// Get your steam avatar.
         /// </summary>
         /// <param name="device">The GraphicsDevice</param>
         /// <returns>Your Steam Avatar Image as a Texture2D object</returns>
         Texture2D GetSteamUserAvatar(GraphicsDevice device)
         {
-            //Get the icon type as a integer
+            // Get the icon type as a integer.
             int icon = SteamFriends.GetLargeFriendAvatar(SteamUser.GetSteamID());
 
-            //Check if we got an icon type
+            // Check if we got an icon type.
             if (icon != 0)
             {
-                uint Width = 0;
-                uint Height = 0;
-                bool ret = SteamUtils.GetImageSize(icon, out Width, out Height);
+                uint width = 0;
+                uint height = 0;
+                bool ret = SteamUtils.GetImageSize(icon, out width, out height);
 
-                if (ret && Width > 0 && Height > 0)
+                if (ret && width > 0 && height > 0)
                 {
-                    byte[] RGBA = new byte[Width * Height * 4];
-                    ret = SteamUtils.GetImageRGBA(icon, RGBA, RGBA.Length);
+                    byte[] rgba = new byte[width * height * 4];
+                    ret = SteamUtils.GetImageRGBA(icon, rgba, rgba.Length);
                     if (ret)
                     {
-                        //Creating a Bitmap with the right PixelFormat (Alpha first)
-                        Bitmap OwnAvatar = new Bitmap((int)Width, (int)Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
-
-                        //Creating an empty Texture2D object to hold the pixel data
-                        Texture2D tex = new Texture2D(device, OwnAvatar.Width, OwnAvatar.Height);
-
-                        //Get a reference to the images pixel data
-                        System.Drawing.Rectangle dimension = new System.Drawing.Rectangle(0, 0, OwnAvatar.Width, OwnAvatar.Height);
-                        BitmapData picData = OwnAvatar.LockBits(dimension, ImageLockMode.ReadWrite, OwnAvatar.PixelFormat);
-                        IntPtr pixelStartAddress = picData.Scan0;
-
-                        //Copy the pixel data into the bitmap structure
-                        System.Runtime.InteropServices.Marshal.Copy(RGBA, 0, pixelStartAddress, RGBA.Length);
-
-                        //Copy the pixel data into the Texture2D object
-                        tex.SetData(RGBA);
-
-                        //Unlocks the Bitmap
-                        OwnAvatar.UnlockBits(picData);
-
-                        //Return the Texture2D with your Steam Avatar data
-                        return tex;
+                        Texture2D texture = new Texture2D(device, (int) width, (int) height, false, SurfaceFormat.Color);
+                        texture.SetData(RGBA, 0, rgba.Length);
+                        // Return the Texture2D with your Steam Avatar data.
+                        return texture;
                     }
                 }
             }
