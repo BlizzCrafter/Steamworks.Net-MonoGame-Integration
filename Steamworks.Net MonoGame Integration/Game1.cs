@@ -188,6 +188,24 @@ namespace Steamworks.Net_MonoGame_Integration
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            // The following lines restart your game through the Steam-client in case someone started it by double-clicking the exe.
+            try
+            {
+                if (SteamAPI.RestartAppIfNecessary((AppId_t)480))
+                {
+                    Console.Out.WriteLine("Game wasn't started by Steam-client. Restarting.");
+                    Exit();
+                }
+            }
+            catch (DllNotFoundException e)
+            {
+                // We check this here as it will be the first instance of it.
+                Console.Out.WriteLine("[Steamworks.NET] Could not load [lib]steam_api.dll/so/dylib." +
+                                      " It's likely not in the correct location. Refer to the README for more details.\n" +
+                                      e);
+                Exit();
+            }
         }
 
         private void Game1_Exiting(object sender, EventArgs e)
@@ -208,7 +226,7 @@ namespace Steamworks.Net_MonoGame_Integration
 
             base.Initialize();
         }
-        
+
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
@@ -218,28 +236,19 @@ namespace Steamworks.Net_MonoGame_Integration
 
             Font = Content.Load<SpriteFont>(@"Font");
 
-            bool SteamLoadingError = false;
-            try
+            bool steamLoadingError = false;
+            if (!SteamAPI.Init())
             {
-                if (!SteamAPI.Init())
-                {
-                    Console.WriteLine("SteamAPI.Init() failed!");
-                    SteamLoadingError = true;
-                }
-                else
-                {
-                    //Steam is running
-                    isSteamRunning = true;
-                }
+                Console.WriteLine("SteamAPI.Init() failed!");
+                steamLoadingError = true;
             }
-            catch (DllNotFoundException e)
-            { 
-                // We check this here as it will be the first instance of it.
-                Console.WriteLine(e);
-                SteamLoadingError = true;
+            else
+            {
+                // Steam is running.
+                isSteamRunning = true;
             }
 
-            if (SteamLoadingError == false)
+            if (steamLoadingError == false)
             {
                 InitializeCallbacks(); // We do this after SteamAPI.Init() has occured
 
@@ -266,13 +275,14 @@ namespace Steamworks.Net_MonoGame_Integration
                 //Get your trimmed Steam User Name
                 string UntrimmedUserName = "";
                 UntrimmedUserName = SteamFriends.GetPersonaName();
-                UntrimmedUserName = Regex.Replace(UntrimmedUserName, @"[^\u0000-\u007F]", string.Empty); //Remove unsopported chars like emojis
+                UntrimmedUserName = Regex.Replace(UntrimmedUserName, @"[^\u0000-\u007F]", string.Empty);
+                    //Remove unsopported chars like emojis
                 SteamUserName = UntrimmedUserName.Trim(); //Remove spaces
 
                 Exiting += Game1_Exiting;
             }
         }
-        
+
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
