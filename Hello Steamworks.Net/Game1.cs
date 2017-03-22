@@ -53,6 +53,10 @@ namespace Hello_Steamworks.Net
                 Console.WriteLine(e);
             }
 
+            Window.Position = new Point(
+                    (GraphicsDevice.DisplayMode.Width / 2) - (graphics.PreferredBackBufferWidth / 2),
+                    (GraphicsDevice.DisplayMode.Height / 2) - (graphics.PreferredBackBufferHeight / 2) - 25);
+
             base.Initialize();
         }
 

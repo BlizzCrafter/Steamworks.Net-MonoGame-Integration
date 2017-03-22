@@ -179,6 +179,10 @@ namespace Steamworks.Net_MonoGame_Integration
             ScreenWidth = graphics.PreferredBackBufferWidth;
             ScreenHeight = graphics.PreferredBackBufferHeight;
 
+            Window.Position = new Point(
+                    (GraphicsDevice.DisplayMode.Width / 2) - (graphics.PreferredBackBufferWidth / 2),
+                    (GraphicsDevice.DisplayMode.Height / 2) - (graphics.PreferredBackBufferHeight / 2) - 25);
+
             graphics.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = false;
 
