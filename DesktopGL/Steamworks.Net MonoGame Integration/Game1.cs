@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
 // System.Drawing.Color is identical to Microsoft.Xna.Framework.Color.
 // We want to use the one from the Microsoft.Xna.Framework.
 
@@ -64,7 +65,7 @@ namespace Steamworks.Net_MonoGame_Integration
                     ret = SteamUtils.GetImageRGBA(icon, rgba, rgba.Length);
                     if (ret)
                     {
-                        var texture = new Texture2D(device, (int) width, (int) height, false, SurfaceFormat.Color);
+                        var texture = new Texture2D(device, (int)width, (int)height, false, SurfaceFormat.Color);
                         texture.SetData(rgba, 0, rgba.Length);
                         return texture;
                     }
@@ -166,7 +167,7 @@ namespace Steamworks.Net_MonoGame_Integration
             // The following lines restart your game through the Steam-client in case someone started it by double-clicking the exe.
             try
             {
-                if (SteamAPI.RestartAppIfNecessary((AppId_t) 480))
+                if (SteamAPI.RestartAppIfNecessary((AppId_t)480))
                 {
                     Console.Out.WriteLine("Game wasn't started by Steam-client. Restarting.");
                     Exit();
@@ -195,13 +196,11 @@ namespace Steamworks.Net_MonoGame_Integration
             IsMouseVisible = true;
             ScreenWidth = graphics.PreferredBackBufferWidth;
             ScreenHeight = graphics.PreferredBackBufferHeight;
-
-            Window.Position = new Point(
-                    (GraphicsDevice.DisplayMode.Width / 2) - (graphics.PreferredBackBufferWidth / 2),
-                    (GraphicsDevice.DisplayMode.Height / 2) - (graphics.PreferredBackBufferHeight / 2) - 25);
-
             graphics.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = false;
+
+            Window.Position = new Point(GraphicsDevice.DisplayMode.Width / 2 - graphics.PreferredBackBufferWidth / 2,
+                GraphicsDevice.DisplayMode.Height / 2 - graphics.PreferredBackBufferHeight / 2 - 25);
 
             base.Initialize();
         }
@@ -324,7 +323,7 @@ namespace Steamworks.Net_MonoGame_Integration
         private Vector2 MoveUpAndDown(GameTime gameTime, float speed)
         {
             var time = gameTime.TotalGameTime.TotalSeconds * speed;
-            return new Vector2(0, (float) Math.Sin(time));
+            return new Vector2(0, (float)Math.Sin(time));
         }
     }
 }
