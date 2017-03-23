@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
 // System.Drawing.Color is identical to Microsoft.Xna.Framework.Color.
 // We want to use the one from the Microsoft.Xna.Framework.
 
@@ -196,6 +195,11 @@ namespace Steamworks.Net_MonoGame_Integration
             IsMouseVisible = true;
             ScreenWidth = graphics.PreferredBackBufferWidth;
             ScreenHeight = graphics.PreferredBackBufferHeight;
+
+            Window.Position = new Point(
+                    (GraphicsDevice.DisplayMode.Width / 2) - (graphics.PreferredBackBufferWidth / 2),
+                    (GraphicsDevice.DisplayMode.Height / 2) - (graphics.PreferredBackBufferHeight / 2) - 25);
+
             graphics.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = false;
 
