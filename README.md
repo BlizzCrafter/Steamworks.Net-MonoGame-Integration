@@ -16,10 +16,26 @@ The following is required to successfully compile the solution:
 To set up your own MonoGame with Steamworks.Net integration project you need to do the following steps:
 
 - Add the **Steamworks.Net.dll** as a reference
+
 - Add **CSteamworks.dll** as a new file to the project and set "copy to output directory" to "copy if newer"
+
 - Add **steam_api.dll** as a new file to the project and set "copy to output directory" to "copy if newer"
+
 - Add **steam_appid.txt** as a new file to the project and set "copy to output directory" to "copy if newer"
+
+  - Don't forget to add that file as a ```FileExclusion``` to your Steamworks build-script since you don't want that file to be copied to your customer's destination directory, since it's for debugging purposes only (it lets you try all the steam-stuff without actually having that game listed and active on steam and is important for debugging directly from out of Visual Studio).
+    Your ```depot_build_xxxxxx.vdf``` you're referencing in your ```app_build_xxxxxx.vdf``` should end like this:
+
+    ``````
+    	// but exclude all symbol files  
+    	// This can be a full path, or a path relative to ContentRoot
+      "FileExclusion" "*.pdb"
+      "FileExclusion" "steam_appid.txt"
+    }
+    ``````
+
 - Add your desired **Steamworks AppID** to the steam_appid.txt file
+
 - Initialize the API with the method **SteamAPI.Init()** like this:
 
 ```cs

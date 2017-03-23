@@ -1,181 +1,198 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Text.RegularExpressions;
+// System.Drawing.Color is identical to Microsoft.Xna.Framework.Color.
+// We want to use the one from the Microsoft.Xna.Framework.
 
 namespace Steamworks.Net_MonoGame_Integration
 {
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private readonly GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
 
-        SpriteFont Font;
+        public SpriteFont Font { get; private set; }
+        public int ScreenWidth { get; private set; }
+        public int ScreenHeight { get; private set; }
+        private const string STEAM_NOT_RUNNING_ERROR_MESSAGE = "Please start your steam client to receive data!";
 
-        int ScreenWidth, ScreenHeight;
-        string SteamNotRunningErrorMessage = "Please start your steam client to receive data!";
-
-        #region Steam Fields
 
         /// <summary>
-        /// Hold the information if the steam client is running after calling Steam.Init()
+        ///     Hold the information if the steam client is running after calling Steam.Init().
         /// </summary>
-        bool isSteamRunning { get; set; }
+        private bool IsSteamRunning { get; set; }
 
-        //Collectible data
-        string CurrentLanguage { get; set; } = "";
-        string AvailableLanguages { get; set; } = "";
-        string InstallDir { get; set; } = "";
-        static bool SteamOverlayActive { get; set; } = false;
-        static string UserStats { get; set; } = "";
-        static string PersonaState { get; set; } = "";
-        static string LeaderboardData { get; set; } = "";
-        static string NumberOfCurrentPlayers { get; set; } = "";
+        // Collectible data.
+        private string SteamUserName { get; set; } = "";
+        private string CurrentLanguage { get; set; } = "";
+        private string AvailableLanguages { get; set; } = "";
+        private string InstallDir { get; set; } = "";
+        private Texture2D UserAvatar { get; set; }
 
-        /// <summary>
-        /// Get your Steam user name
-        /// </summary>
-        string SteamUserName { get; set; } = "";
-        
-        /// <summary>
-        /// Get your playtime in seconds since game is active
-        /// </summary>
-        uint PlayTimeInSeconds()
-        {
-            return SteamUtils.GetSecondsSinceAppActive();
-        }
+        private static bool SteamOverlayActive { get; set; }
+        private static string UserStats { get; set; } = "";
+        private static string PersonaState { get; set; } = "";
+        private static string LeaderboardData { get; set; } = "";
+        private static string NumberOfCurrentPlayers { get; set; } = "";
+
+        private uint PlayTimeInSeconds() => SteamUtils.GetSecondsSinceAppActive();
 
         /// <summary>
-        /// A Texture2D object for your Steam Avatar image
-        /// </summary>
-        Texture2D UserAvatar;
-
-        /// <summary>
-        /// Get your steam avatar.
+        ///     Get your steam avatar.
+        ///     Important:
+        ///     The returned Texture2D object is NOT loaded using a ContentManager.
+        ///     So it's your responsibility to dispose it at the end by calling <see cref="Texture2D.Dispose()" />.
         /// </summary>
         /// <param name="device">The GraphicsDevice</param>
         /// <returns>Your Steam Avatar Image as a Texture2D object</returns>
-        Texture2D GetSteamUserAvatar(GraphicsDevice device)
+        private Texture2D GetSteamUserAvatar(GraphicsDevice device)
         {
             // Get the icon type as a integer.
-            int icon = SteamFriends.GetLargeFriendAvatar(SteamUser.GetSteamID());
+            var icon = SteamFriends.GetLargeFriendAvatar(SteamUser.GetSteamID());
 
             // Check if we got an icon type.
             if (icon != 0)
             {
-                uint width = 0;
-                uint height = 0;
-                bool ret = SteamUtils.GetImageSize(icon, out width, out height);
+                uint width;
+                uint height;
+                var ret = SteamUtils.GetImageSize(icon, out width, out height);
 
                 if (ret && width > 0 && height > 0)
                 {
-                    byte[] rgba = new byte[width * height * 4];
+                    var rgba = new byte[width * height * 4];
                     ret = SteamUtils.GetImageRGBA(icon, rgba, rgba.Length);
                     if (ret)
                     {
-                        Texture2D texture = new Texture2D(device, (int) width, (int) height, false, SurfaceFormat.Color);
+                        var texture = new Texture2D(device, (int) width, (int) height, false, SurfaceFormat.Color);
                         texture.SetData(rgba, 0, rgba.Length);
-                        // Return the Texture2D with your Steam Avatar data.
                         return texture;
                     }
                 }
             }
             return null;
         }
-        
-        /// <summary>
-        /// This callback checks if the SteamOverlay was activated
-        /// </summary>
-        static Callback<GameOverlayActivated_t> m_GameOverlayActivated;
 
         /// <summary>
-        /// This callback receives the current number of players
+        ///     Replaces characters not supported by your spritefont.
         /// </summary>
-        static CallResult<NumberOfCurrentPlayers_t> m_NumberOfCurrentPlayers;
-
-        /// <summary>
-        /// This callback receives a Leaderboard
-        /// </summary>
-        static CallResult<LeaderboardFindResult_t> m_callResultFindLeaderboard;
-
-        /// <summary>
-        /// This callback receives the PersonaStateChange
-        /// </summary>
-        static Callback<PersonaStateChange_t> m_PersonaStateChange;
-
-        /// <summary>
-        /// This callback receives Stats
-        /// </summary>
-        static Callback<UserStatsReceived_t> m_UserStatsReceived;
-
-        /// <summary>
-        /// Initialize some Steam Callbacks
-        /// </summary>
-        void InitializeCallbacks()
+        /// <param name="font">The font.</param>
+        /// <param name="input">The input string.</param>
+        /// <param name="replaceString">The string to replace illegal characters with.</param>
+        /// <returns></returns>
+        public static string ReplaceUnsupportedChars(SpriteFont font, string input, string replaceString = "")
         {
-            m_GameOverlayActivated = Callback<GameOverlayActivated_t>.Create(OnGameOverlayActivated);
-            m_NumberOfCurrentPlayers = CallResult<NumberOfCurrentPlayers_t>.Create(OnNumberOfCurrentPlayers);
-            m_callResultFindLeaderboard = CallResult<LeaderboardFindResult_t>.Create(OnFindLeaderboard);
-            m_PersonaStateChange = Callback<PersonaStateChange_t>.Create(OnPersonaStateChange);
-            m_UserStatsReceived = Callback<UserStatsReceived_t>.Create(
-                (pCallback) => {
-                    UserStats = "[" + 
-                    UserStatsReceived_t.k_iCallback + " - UserStatsReceived] - " + 
-                    pCallback.m_eResult + " -- " + pCallback.m_nGameID + " -- " + pCallback.m_steamIDUser;
-                });
+            string result = "";
+            if (input == null)
+            {
+                return null;
+            }
+
+            foreach (char c in input)
+            {
+                if (font.Characters.Contains(c) || c == '\r' || c == '\n')
+                {
+                    result += c;
+                }
+                else
+                {
+                    result += replaceString;
+                }
+            }
+            return result;
         }
 
-        //Register some Callbacks
-        static void OnGameOverlayActivated(GameOverlayActivated_t pCallback)
+        private static Callback<GameOverlayActivated_t> mGameOverlayActivated;
+        private static CallResult<NumberOfCurrentPlayers_t> mNumberOfCurrentPlayers;
+        private static CallResult<LeaderboardFindResult_t> mCallResultFindLeaderboard;
+        private static Callback<PersonaStateChange_t> mPersonaStateChange;
+        private static Callback<UserStatsReceived_t> mUserStatsReceived;
+
+        /// <summary>
+        ///     Initialize some Steam Callbacks.
+        /// </summary>
+        private void InitializeCallbacks()
+        {
+            mGameOverlayActivated = Callback<GameOverlayActivated_t>.Create(OnGameOverlayActivated);
+            mNumberOfCurrentPlayers = CallResult<NumberOfCurrentPlayers_t>.Create(OnNumberOfCurrentPlayers);
+            mCallResultFindLeaderboard = CallResult<LeaderboardFindResult_t>.Create(OnFindLeaderboard);
+            mPersonaStateChange = Callback<PersonaStateChange_t>.Create(OnPersonaStateChange);
+            mUserStatsReceived =
+                Callback<UserStatsReceived_t>.Create(
+                    pCallback =>
+                    {
+                        UserStats =
+                            $"[{UserStatsReceived_t.k_iCallback} - UserStatsReceived] - {pCallback.m_eResult} -- {pCallback.m_nGameID} -- {pCallback.m_steamIDUser}";
+                    });
+        }
+
+        private static void OnGameOverlayActivated(GameOverlayActivated_t pCallback)
         {
             if (pCallback.m_bActive == 0)
             {
-                //GameOverlay is not active
+                // GameOverlay is not active.
                 SteamOverlayActive = false;
             }
             else
             {
-                //GameOverlay is active
+                // GameOverlay is active.
                 SteamOverlayActive = true;
             }
-        }        
-        static void OnNumberOfCurrentPlayers(NumberOfCurrentPlayers_t pCallback, bool bIOFailure)
-        {
-            NumberOfCurrentPlayers = ("[" + NumberOfCurrentPlayers_t.k_iCallback + 
-                " - NumberOfCurrentPlayers] - " + pCallback.m_bSuccess + " -- " + pCallback.m_cPlayers).ToString();
-        }
-        static void OnFindLeaderboard(LeaderboardFindResult_t pCallback, bool bIOFailure)
-        {
-            LeaderboardData =
-                "[" + LeaderboardFindResult_t.k_iCallback + " - LeaderboardFindResult] - " +
-                pCallback.m_bLeaderboardFound + " -- " + pCallback.m_hSteamLeaderboard;
-        }
-        static void OnPersonaStateChange(PersonaStateChange_t pCallback)
-        {
-            PersonaState =
-                "[" + PersonaStateChange_t.k_iCallback + " - PersonaStateChange] - " +
-                pCallback.m_ulSteamID + " -- " + pCallback.m_nChangeFlags;
         }
 
-        #endregion
+        private static void OnNumberOfCurrentPlayers(NumberOfCurrentPlayers_t pCallback, bool bIoFailure)
+        {
+            NumberOfCurrentPlayers =
+                $"[{NumberOfCurrentPlayers_t.k_iCallback} - NumberOfCurrentPlayers] - {pCallback.m_bSuccess} -- {pCallback.m_cPlayers}";
+        }
+
+        private static void OnFindLeaderboard(LeaderboardFindResult_t pCallback, bool bIoFailure)
+        {
+            LeaderboardData =
+                $"[{LeaderboardFindResult_t.k_iCallback} - LeaderboardFindResult] - {pCallback.m_bLeaderboardFound} -- {pCallback.m_hSteamLeaderboard}";
+        }
+
+        private static void OnPersonaStateChange(PersonaStateChange_t pCallback)
+        {
+            PersonaState =
+                $"[{PersonaStateChange_t.k_iCallback} - PersonaStateChange] - {pCallback.m_ulSteamID} -- {pCallback.m_nChangeFlags}";
+        }
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            // The following lines restart your game through the Steam-client in case someone started it by double-clicking the exe.
+            try
+            {
+                if (SteamAPI.RestartAppIfNecessary((AppId_t) 480))
+                {
+                    Console.Out.WriteLine("Game wasn't started by Steam-client. Restarting.");
+                    Exit();
+                }
+            }
+            catch (DllNotFoundException e)
+            {
+                // We check this here as it will be the first instance of it.
+                Console.Out.WriteLine("[Steamworks.NET] Could not load [lib]steam_api.dll/so/dylib." +
+                                      " It's likely not in the correct location. Refer to the README for more details.\n" +
+                                      e);
+                Exit();
+            }
         }
 
         private void Game1_Exiting(object sender, EventArgs e)
         {
             SteamAPI.Shutdown();
+            UserAvatar?.Dispose();
         }
-        
+
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            IsMouseVisible = true;
 
+            IsMouseVisible = true;
             ScreenWidth = graphics.PreferredBackBufferWidth;
             ScreenHeight = graphics.PreferredBackBufferHeight;
 
@@ -188,7 +205,7 @@ namespace Steamworks.Net_MonoGame_Integration
 
             base.Initialize();
         }
-        
+
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
@@ -198,72 +215,66 @@ namespace Steamworks.Net_MonoGame_Integration
 
             Font = Content.Load<SpriteFont>(@"Font");
 
-            bool SteamLoadingError = false;
-            try
+            var steamLoadingError = false;
+            if (!SteamAPI.Init())
             {
-                if (!SteamAPI.Init())
-                {
-                    Console.WriteLine("SteamAPI.Init() failed!");
-                    SteamLoadingError = true;
-                }
-                else
-                {
-                    //Steam is running
-                    isSteamRunning = true;
-                }
+                Console.WriteLine("SteamAPI.Init() failed!");
+                steamLoadingError = true;
             }
-            catch (DllNotFoundException e)
-            { 
-                // We check this here as it will be the first instance of it.
-                Console.WriteLine(e);
-                SteamLoadingError = true;
+            else
+            {
+                // Steam is running.
+                IsSteamRunning = true;
             }
 
-            if (SteamLoadingError == false)
+            if (steamLoadingError == false)
             {
-                InitializeCallbacks(); // We do this after SteamAPI.Init() has occured
+                // It's important that the next call happens AFTER the call to SteamAPI.Init().
+                InitializeCallbacks();
 
                 SteamUtils.SetOverlayNotificationPosition(ENotificationPosition.k_EPositionTopRight);
-
-                //Uncomment the next line to adjust the OverlayNotificationPosition
+                // Uncomment the next line to adjust the OverlayNotificationPosition.
                 //SteamUtils.SetOverlayNotificationInset(400, 0);
 
-                //Set Collactible Data
-                CurrentLanguage = "CurrentGameLanguage: " + SteamApps.GetCurrentGameLanguage();
-                AvailableLanguages = "Languages: " + SteamApps.GetAvailableGameLanguages();
-                UserStats = "Reqesting Current Stats - " + SteamUserStats.RequestCurrentStats();
-                m_NumberOfCurrentPlayers.Set(SteamUserStats.GetNumberOfCurrentPlayers());
-                SteamAPICall_t hSteamAPICall = SteamUserStats.FindLeaderboard("Quickest Win");
-                m_callResultFindLeaderboard.Set(hSteamAPICall);
+                // Set collactible data.
+                CurrentLanguage = $"CurrentGameLanguage: {SteamApps.GetCurrentGameLanguage()}";
+                AvailableLanguages = $"Languages: {SteamApps.GetAvailableGameLanguages()}";
+                UserStats = $"Reqesting Current Stats - {SteamUserStats.RequestCurrentStats()}";
+                mNumberOfCurrentPlayers.Set(SteamUserStats.GetNumberOfCurrentPlayers());
+                var hSteamApiCall = SteamUserStats.FindLeaderboard("Quickest Win");
+                mCallResultFindLeaderboard.Set(hSteamApiCall);
 
                 string folder;
-                uint length = SteamApps.GetAppInstallDir(SteamUtils.GetAppID(), out folder, 260);
-                InstallDir = "AppInstallDir: " + length + " " + folder;
+                var length = SteamApps.GetAppInstallDir(SteamUtils.GetAppID(), out folder, 260);
+                InstallDir = $"AppInstallDir: {length} {folder}";
 
-                //Get your Steam Avatar (Image) as a Texture2D
+                // Get your Steam Avatar (Image) as a Texture2D.
                 UserAvatar = GetSteamUserAvatar(GraphicsDevice);
 
-                //Get your trimmed Steam User Name
-                string UntrimmedUserName = "";
-                UntrimmedUserName = SteamFriends.GetPersonaName();
-                UntrimmedUserName = Regex.Replace(UntrimmedUserName, @"[^\u0000-\u007F]", string.Empty); //Remove unsopported chars like emojis
-                SteamUserName = UntrimmedUserName.Trim(); //Remove spaces
+                // Get your trimmed Steam User Name.
+                var untrimmedUserName = SteamFriends.GetPersonaName();
+                // Remove unsupported chars like emojis or other stuff our font cannot handle.
+                untrimmedUserName = ReplaceUnsupportedChars(Font, untrimmedUserName);
+                SteamUserName = untrimmedUserName.Trim();
 
                 Exiting += Game1_Exiting;
             }
         }
-        
+
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+                Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+            }
 
             // TODO: Add your update logic here
-            if (isSteamRunning == true) SteamAPI.RunCallbacks();
 
+            if (IsSteamRunning) SteamAPI.RunCallbacks();
             base.Update(gameTime);
         }
-        
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -272,73 +283,48 @@ namespace Steamworks.Net_MonoGame_Integration
 
             spriteBatch.Begin();
 
-            if (isSteamRunning == true)
+            if (IsSteamRunning)
             {
                 //Draw your Steam Avatar and Steam Name
                 if (UserAvatar != null)
                 {
-                    Vector2 AvatarPosition = new Vector2(
-                        (ScreenWidth / 2),
-                        (ScreenHeight / 2) + (!SteamOverlayActive ? MoveUpAndDown(gameTime, 2).Y * 25 : 0));
-
-                    spriteBatch.Draw(UserAvatar, AvatarPosition, null, Color.White, 0f,
-                        //Origin
-                        new Vector2(
-                            UserAvatar.Width / 2,
-                            UserAvatar.Height / 2), 1f, SpriteEffects.None, 0f);
-
+                    var avatarPosition = new Vector2(ScreenWidth / 2f,
+                        ScreenHeight / 2f + (!SteamOverlayActive ? MoveUpAndDown(gameTime, 2).Y * 25 : 0));
+                    spriteBatch.Draw(UserAvatar, avatarPosition, null, Color.White, 0f,
+                        new Vector2(UserAvatar.Width / 2f, UserAvatar.Height / 2f), 1f, SpriteEffects.None, 0f);
                     spriteBatch.DrawString(Font, SteamUserName,
-                        new Vector2(
-                            AvatarPosition.X - (Font.MeasureString(SteamUserName).X / 2),
-                            AvatarPosition.Y - (UserAvatar.Height / 2) - (Font.MeasureString(SteamUserName).Y * 1.5f)),
+                        new Vector2(avatarPosition.X - Font.MeasureString(SteamUserName).X / 2f,
+                            avatarPosition.Y - UserAvatar.Height / 2f - Font.MeasureString(SteamUserName).Y * 1.5f),
                         Color.Yellow);
                 }
 
-                //Draw Data UpLeft
+                // Draw data up/left.
                 spriteBatch.DrawString(Font,
-                    CurrentLanguage + "\n" +
-                    AvailableLanguages + "\n" +
-                    InstallDir + "\n\n" +
-                    "Overlay Active: " + SteamOverlayActive.ToString() + "\n" +
-                    "App PlayTime: " + PlayTimeInSeconds().ToString(),
+                    $"{CurrentLanguage}\n{AvailableLanguages}\n{InstallDir}\n\nOverlay Active: {SteamOverlayActive}\nApp PlayTime: {PlayTimeInSeconds()}",
                     new Vector2(20, 20), Color.White);
 
-                //Draw Data DownLeft
-                spriteBatch.DrawString(Font,
-                    NumberOfCurrentPlayers.ToString() + "\n" +
-                    PersonaState + "\n" +
-                    UserStats + "\n" +
-                    LeaderboardData,
+                // Draw data down/left.
+                spriteBatch.DrawString(Font, $"{NumberOfCurrentPlayers}\n{PersonaState}\n{UserStats}\n{LeaderboardData}",
                     new Vector2(20, 375), Color.White);
             }
             else
             {
-                spriteBatch.DrawString(Font, SteamNotRunningErrorMessage, 
-                    new Vector2(
-                            (ScreenWidth / 2) - (Font.MeasureString(SteamNotRunningErrorMessage).X / 2),
-                            (ScreenHeight / 2) - (Font.MeasureString(SteamNotRunningErrorMessage).Y / 2)), Color.White);
+                spriteBatch.DrawString(Font, STEAM_NOT_RUNNING_ERROR_MESSAGE,
+                    new Vector2(ScreenWidth / 2f - Font.MeasureString(STEAM_NOT_RUNNING_ERROR_MESSAGE).X / 2f,
+                        ScreenHeight / 2f - Font.MeasureString(STEAM_NOT_RUNNING_ERROR_MESSAGE).Y / 2f), Color.White);
             }
 
             spriteBatch.End();
-
             base.Draw(gameTime);
         }
 
         /// <summary>
-        /// Smooth UpDown Movement
+        ///     Smooth up/down movement.
         /// </summary>
-        Vector2 MoveUpAndDown(GameTime gameTime, float speed)
+        private Vector2 MoveUpAndDown(GameTime gameTime, float speed)
         {
-            if (gameTime != null)
-            {
-                double time = gameTime.TotalGameTime.TotalSeconds * speed;
-
-                float x = 0;
-                float y = (float)Math.Sin(time);
-
-                return new Vector2(x, y);
-            }
-            return Vector2.Zero;
+            var time = gameTime.TotalGameTime.TotalSeconds * speed;
+            return new Vector2(0, (float) Math.Sin(time));
         }
     }
 }

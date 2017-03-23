@@ -1,47 +1,41 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Text.RegularExpressions;
 using Steamworks;
 
 namespace Hello_Steamworks.Net
 {
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private readonly GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
 
-        SpriteFont Font;
+        public SpriteFont Font { get; private set; }
 
-        string 
-            WelcomeMessage = "Error: Please start your Steam Client before you run this example!", 
-            WelcomeNote = "- Press [Shift + Tab] to open the Steam Overlay -";
+        public string WelcomeMessage { get; private set; } =
+            "Error: Please start your Steam Client before you run this example!";
 
-        bool isSteamRunning = false;
+        public string WelcomeNote { get; } = "- Press [Shift + Tab] to open the Steam Overlay -";
+        public bool IsSteamRunning { get; private set; }
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
-        
+
         protected override void Initialize()
         {
             try
             {
-                if (!SteamAPI.Init()) Console.WriteLine("SteamAPI.Init() failed!");
+                if (!SteamAPI.Init())
+                {
+                    Console.WriteLine("SteamAPI.Init() failed!");
+                }
                 else
                 {
-                    isSteamRunning = true;
-
-                    //Get your trimmed Steam User Name
-                    string SteamUserName = SteamFriends.GetPersonaName(), UserNameTrimmed;
-                    SteamUserName = Regex.Replace(SteamUserName, @"[^\u0000-\u007F]", string.Empty); //Remove unsopported chars like emojis
-                    UserNameTrimmed = SteamUserName.Trim(); //Remove spaces
-
-                    WelcomeMessage = "Hello " + UserNameTrimmed + "!";
-
+                    IsSteamRunning = true;
                     SteamUtils.SetOverlayNotificationPosition(ENotificationPosition.k_EPositionBottomRight);
 
                     Exiting += Game1_Exiting;
@@ -51,6 +45,7 @@ namespace Hello_Steamworks.Net
             {
                 // We check this here as it will be the first instance of it.
                 Console.WriteLine(e);
+                Exit();
             }
 
             Window.Position = new Point(
@@ -60,26 +55,67 @@ namespace Hello_Steamworks.Net
             base.Initialize();
         }
 
-        //ShutDown the SteamAPI
+        /// <summary>
+        ///     Replaces characters not supported by your spritefont.
+        /// </summary>
+        /// <param name="font">The font.</param>
+        /// <param name="input">The input string.</param>
+        /// <param name="replaceString">The string to replace illegal characters with.</param>
+        /// <returns></returns>
+        public static string ReplaceUnsupportedChars(SpriteFont font, string input, string replaceString = "")
+        {
+            string result = "";
+            if (input == null)
+            {
+                return null;
+            }
+
+            foreach (char c in input)
+            {
+                if (font.Characters.Contains(c) || c == '\r' || c == '\n')
+                {
+                    result += c;
+                }
+                else
+                {
+                    result += replaceString;
+                }
+            }
+            return result;
+        }
+
         private void Game1_Exiting(object sender, EventArgs e)
         {
             SteamAPI.Shutdown();
         }
-        
+
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             Font = Content.Load<SpriteFont>(@"Font");
+
+            // Get your trimmed Steam User Name.
+            string steamUserName = SteamFriends.GetPersonaName();
+            // Remove unsupported chars like emojis or other stuff our font cannot handle.
+            steamUserName = ReplaceUnsupportedChars(Font, steamUserName);
+            var userNameTrimmed = steamUserName.Trim();
+            WelcomeMessage = $"Hello {userNameTrimmed}!";
         }
-        
+
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+                Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+            }
 
-            if (isSteamRunning == true) SteamAPI.RunCallbacks();
+            if (IsSteamRunning)
+            {
+                SteamAPI.RunCallbacks();
+            }
 
             base.Update(gameTime);
         }
@@ -89,22 +125,22 @@ namespace Hello_Steamworks.Net
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
 
-            //Draw WelcomeMessage
-            spriteBatch.DrawString(Font, WelcomeMessage, new Vector2(
-                (graphics.PreferredBackBufferWidth / 2) - (Font.MeasureString(WelcomeMessage).X / 2),
-                (graphics.PreferredBackBufferHeight / 2) - (Font.MeasureString(WelcomeMessage).Y / 2) - 
-                (isSteamRunning ? 20 : 0)), Color.GreenYellow);
+            // Draw WelcomeMessage.
+            spriteBatch.DrawString(Font, WelcomeMessage,
+                new Vector2(graphics.PreferredBackBufferWidth / 2f - Font.MeasureString(WelcomeMessage).X / 2f,
+                    graphics.PreferredBackBufferHeight / 2f - Font.MeasureString(WelcomeMessage).Y / 2f -
+                    (IsSteamRunning ? 20 : 0)), Color.GreenYellow);
 
-            if (isSteamRunning == true)
+            if (IsSteamRunning)
             {
-                //Draw WelcomeNote
-                spriteBatch.DrawString(Font, WelcomeNote, new Vector2(
-                    (graphics.PreferredBackBufferWidth / 2) - (Font.MeasureString(WelcomeNote).X / 2),
-                    (graphics.PreferredBackBufferHeight / 2) - (Font.MeasureString(WelcomeNote).Y / 2) + 20), Color.GreenYellow);
+                // Draw WelcomeNote.
+                spriteBatch.DrawString(Font, WelcomeNote,
+                    new Vector2(graphics.PreferredBackBufferWidth / 2f - Font.MeasureString(WelcomeNote).X / 2f,
+                        graphics.PreferredBackBufferHeight / 2f - Font.MeasureString(WelcomeNote).Y / 2f + 20),
+                    Color.GreenYellow);
             }
 
             spriteBatch.End();
-
             base.Draw(gameTime);
         }
     }
