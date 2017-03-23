@@ -1,5 +1,5 @@
-# Steamworks.Net MonoGame Integration (DesktopGL)
-This repo is for everyone who is about to integrate the Steamworks.Net.dll into a MonoGame DesktopGL project. It shows some Steamworks.Net features and how easy it is to integrate it into a MonoGame project.
+# Steamworks.Net MonoGame Integration
+This repo is for everyone who is about to integrate the Steamworks.Net.dll into a MonoGame project. It shows some Steamworks.Net features and how easy it is to integrate it into a MonoGame project.
 
 ![HelloSteamworks](Documentation/MonoGameSteamworksNet_03.jpg)
 ![HelloSteamworks](Documentation/MonoGameSteamworksNet_05.jpg)
@@ -8,7 +8,7 @@ This repo is for everyone who is about to integrate the Steamworks.Net.dll into 
 
 The following is required to successfully compile the solution:
 
-- MonoGame 3.6 (DesktopGL) [![Click to visit the Windows branch](https://github.com/sqrMin1/Steamworks.Net-MonoGame-Integration/tree/Windows)]
+- MonoGame 3.6
 - [Steamworks.Net](https://github.com/rlabrecque/Steamworks.NET) Precompiled .dlls are included in this repo. They are targeting **Steam SDK 1.39** (Steamworks.Net 9.0.0)
 
 ### How To
