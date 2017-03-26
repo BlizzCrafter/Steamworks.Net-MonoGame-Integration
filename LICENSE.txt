@@ -4,6 +4,8 @@ MonoGame
 Portions of MonoGame
 Steam Logo
 
+-------------------------------------------------------------------------------
+
 The MIT License (MIT)
 
 Steamworks.Net Copyright (c) 2013-2017 Riley Labrecque
