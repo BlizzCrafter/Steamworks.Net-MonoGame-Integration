@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 // System.Drawing.Color is identical to Microsoft.Xna.Framework.Color.
 // We want to use the one from the Microsoft.Xna.Framework.
 
-namespace Steamworks.Net_MonoGame_Integration
+namespace Steamworks.Net_MonoGame_Integration.DesktopGL
 {
     public class Game1 : Game
     {

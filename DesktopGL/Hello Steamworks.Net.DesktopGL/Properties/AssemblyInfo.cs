@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Steamworks.Net MonoGame Integration")]
-[assembly: AssemblyProduct("Steamworks.Net MonoGame Integration")]
+[assembly: AssemblyTitle("Hello Steamworks.Net.DesktopGL")]
+[assembly: AssemblyProduct("Hello Steamworks.Net.DesktopGL")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c0dc97e5-251f-42a6-8e96-a67d0b3e8dc8")]
+[assembly: Guid("d5bab696-272d-441b-83a2-b282199937fa")]
 
 // Version information for an assembly consists of the following four values:
 //

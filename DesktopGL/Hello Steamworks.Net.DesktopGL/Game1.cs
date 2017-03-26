@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Steamworks;
 
-namespace Hello_Steamworks.Net
+namespace Hello_Steamworks.Net.DesktopGL
 {
     public class Game1 : Game
     {
