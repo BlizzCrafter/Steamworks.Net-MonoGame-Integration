@@ -17,7 +17,6 @@ namespace Hello_Steamworks.Net
             "Error: Please start your Steam Client before you run this example!";
 
         public string WelcomeNote { get; } = "- Press [Shift + Tab] to open the Steam Overlay -";
-        public bool IsSteamRunning { get; private set; }
 
         public Game1()
         {
@@ -35,7 +34,6 @@ namespace Hello_Steamworks.Net
                 }
                 else
                 {
-                    IsSteamRunning = true;
                     SteamUtils.SetOverlayNotificationPosition(ENotificationPosition.k_EPositionBottomRight);
 
                     Exiting += Game1_Exiting;
@@ -95,12 +93,15 @@ namespace Hello_Steamworks.Net
 
             Font = Content.Load<SpriteFont>(@"Font");
 
-            // Get your trimmed Steam User Name.
-            string steamUserName = SteamFriends.GetPersonaName();
-            // Remove unsupported chars like emojis or other stuff our font cannot handle.
-            steamUserName = ReplaceUnsupportedChars(Font, steamUserName);
-            var userNameTrimmed = steamUserName.Trim();
-            WelcomeMessage = $"Hello {userNameTrimmed}!";
+            if (SteamAPI.IsSteamRunning())
+            {
+                // Get your trimmed Steam User Name.
+                string steamUserName = SteamFriends.GetPersonaName();
+                // Remove unsupported chars like emojis or other stuff our font cannot handle.
+                steamUserName = ReplaceUnsupportedChars(Font, steamUserName);
+                var userNameTrimmed = steamUserName.Trim();
+                WelcomeMessage = $"Hello {userNameTrimmed}!";
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -111,10 +112,7 @@ namespace Hello_Steamworks.Net
                 Exit();
             }
 
-            if (IsSteamRunning)
-            {
-                SteamAPI.RunCallbacks();
-            }
+            if (SteamAPI.IsSteamRunning()) SteamAPI.RunCallbacks();
 
             base.Update(gameTime);
         }
@@ -128,9 +126,9 @@ namespace Hello_Steamworks.Net
             spriteBatch.DrawString(Font, WelcomeMessage,
                 new Vector2(graphics.PreferredBackBufferWidth / 2f - Font.MeasureString(WelcomeMessage).X / 2f,
                     graphics.PreferredBackBufferHeight / 2f - Font.MeasureString(WelcomeMessage).Y / 2f -
-                    (IsSteamRunning ? 20 : 0)), Color.GreenYellow);
+                    (SteamAPI.IsSteamRunning() ? 20 : 0)), Color.GreenYellow);
 
-            if (IsSteamRunning)
+            if (SteamAPI.IsSteamRunning())
             {
                 // Draw WelcomeNote.
                 spriteBatch.DrawString(Font, WelcomeNote,

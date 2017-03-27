@@ -17,13 +17,7 @@ namespace Steamworks.Net_MonoGame_Integration
         public int ScreenWidth { get; private set; }
         public int ScreenHeight { get; private set; }
         private const string STEAM_NOT_RUNNING_ERROR_MESSAGE = "Please start your steam client to receive data!";
-
-
-        /// <summary>
-        ///     Hold the information if the steam client is running after calling Steam.Init().
-        /// </summary>
-        private bool IsSteamRunning { get; set; }
-
+        
         // Collectible data.
         private string SteamUserName { get; set; } = "";
         private string CurrentLanguage { get; set; } = "";
@@ -213,21 +207,15 @@ namespace Steamworks.Net_MonoGame_Integration
             // TODO: use this.Content to load your game content here
 
             Font = Content.Load<SpriteFont>(@"Font");
-
-            var steamLoadingError = false;
+            
             if (!SteamAPI.Init())
             {
                 Console.WriteLine("SteamAPI.Init() failed!");
-                steamLoadingError = true;
             }
             else
             {
-                // Steam is running.
-                IsSteamRunning = true;
-            }
+                // Steam is running
 
-            if (steamLoadingError == false)
-            {
                 // It's important that the next call happens AFTER the call to SteamAPI.Init().
                 InitializeCallbacks();
 
@@ -270,7 +258,7 @@ namespace Steamworks.Net_MonoGame_Integration
 
             // TODO: Add your update logic here
 
-            if (IsSteamRunning) SteamAPI.RunCallbacks();
+            if (SteamAPI.IsSteamRunning()) SteamAPI.RunCallbacks();
             base.Update(gameTime);
         }
 
@@ -282,7 +270,7 @@ namespace Steamworks.Net_MonoGame_Integration
 
             spriteBatch.Begin();
 
-            if (IsSteamRunning)
+            if (SteamAPI.IsSteamRunning())
             {
                 //Draw your Steam Avatar and Steam Name
                 if (UserAvatar != null)
