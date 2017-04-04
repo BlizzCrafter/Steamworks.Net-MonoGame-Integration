@@ -3,17 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DesktopGL", "DesktopGL", "{31953F53-A5A3-4750-A021-E1618DC41DC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hello Steamworks.Net", "Samples\Hello Steamworks.Net\Hello Steamworks.Net.csproj", "{E1300152-A874-46AA-948D-86FBABEF1F6F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows", "Windows", "{22A8B7AE-5BD4-452A-A069-ABA6DAC151C5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hello Steamworks.Net", "Windows\Hello Steamworks.Net\Hello Steamworks.Net.csproj", "{173E126F-72CD-411F-8FDF-B2F3C3800B69}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steamworks.Net MonoGame Integration", "Windows\Steamworks.Net MonoGame Integration\Steamworks.Net MonoGame Integration.csproj", "{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hello Steamworks.Net.DesktopGL", "DesktopGL\Hello Steamworks.Net.DesktopGL\Hello Steamworks.Net.DesktopGL.csproj", "{E1300152-A874-46AA-948D-86FBABEF1F6F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steamworks.Net MonoGame Integration.DesktopGL", "DesktopGL\Steamworks.Net MonoGame Integration.DesktopGL\Steamworks.Net MonoGame Integration.DesktopGL.csproj", "{63422818-DBA6-4944-9435-13C217F9B763}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steamworks.Net MonoGame Integration", "Samples\Steamworks.Net MonoGame Integration\Steamworks.Net MonoGame Integration.csproj", "{63422818-DBA6-4944-9435-13C217F9B763}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,48 +23,6 @@ Global
 		Windows|x86 = Windows|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Debug|Any CPU.Build.0 = Debug|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Debug|x64.ActiveCfg = Debug|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Debug|x86.ActiveCfg = Debug|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Debug|x86.Build.0 = Debug|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.OSX-Linux|Any CPU.ActiveCfg = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.OSX-Linux|Any CPU.Build.0 = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.OSX-Linux|x64.ActiveCfg = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.OSX-Linux|x64.Build.0 = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.OSX-Linux|x86.ActiveCfg = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.OSX-Linux|x86.Build.0 = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Release|Any CPU.ActiveCfg = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Release|x64.ActiveCfg = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Release|x86.ActiveCfg = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Release|x86.Build.0 = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Windows|Any CPU.ActiveCfg = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Windows|Any CPU.Build.0 = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Windows|x64.ActiveCfg = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Windows|x64.Build.0 = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Windows|x86.ActiveCfg = Release|x86
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69}.Windows|x86.Build.0 = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Debug|Any CPU.Build.0 = Debug|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Debug|x64.ActiveCfg = Debug|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Debug|x86.ActiveCfg = Debug|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Debug|x86.Build.0 = Debug|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.OSX-Linux|Any CPU.ActiveCfg = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.OSX-Linux|Any CPU.Build.0 = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.OSX-Linux|x64.ActiveCfg = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.OSX-Linux|x64.Build.0 = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.OSX-Linux|x86.ActiveCfg = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.OSX-Linux|x86.Build.0 = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Release|Any CPU.ActiveCfg = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Release|x64.ActiveCfg = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Release|x86.ActiveCfg = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Release|x86.Build.0 = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Windows|Any CPU.ActiveCfg = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Windows|Any CPU.Build.0 = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Windows|x64.ActiveCfg = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Windows|x64.Build.0 = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Windows|x86.ActiveCfg = Release|x86
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85}.Windows|x86.Build.0 = Release|x86
 		{E1300152-A874-46AA-948D-86FBABEF1F6F}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{E1300152-A874-46AA-948D-86FBABEF1F6F}.Debug|x64.ActiveCfg = Debug|x86
 		{E1300152-A874-46AA-948D-86FBABEF1F6F}.Debug|x86.ActiveCfg = Debug|x86
@@ -116,11 +66,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{173E126F-72CD-411F-8FDF-B2F3C3800B69} = {22A8B7AE-5BD4-452A-A069-ABA6DAC151C5}
-		{CFE09985-0D58-448C-BE4B-0B6B33FA5A85} = {22A8B7AE-5BD4-452A-A069-ABA6DAC151C5}
-		{E1300152-A874-46AA-948D-86FBABEF1F6F} = {31953F53-A5A3-4750-A021-E1618DC41DC4}
-		{63422818-DBA6-4944-9435-13C217F9B763} = {31953F53-A5A3-4750-A021-E1618DC41DC4}
 	EndGlobalSection
 EndGlobal

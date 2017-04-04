@@ -18,10 +18,32 @@ namespace Hello_Steamworks.Net
 
         public string WelcomeNote { get; } = "- Press [Shift + Tab] to open the Steam Overlay -";
 
+        // Do not use 'SteamApi.IsSteamRunning()'! It's not reliable and slow
+        //see: https://github.com/rlabrecque/Steamworks.NET/issues/30
+        public static bool IsSteamRunning { get; set; } = false;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            // The following lines restart your game through the Steam-client in case someone started it by double-clicking the exe.
+            try
+            {
+                if (SteamAPI.RestartAppIfNecessary((AppId_t)480))
+                {
+                    Console.Out.WriteLine("Game wasn't started by Steam-client. Restarting.");
+                    Exit();
+                }
+            }
+            catch (DllNotFoundException e)
+            {
+                // We check this here as it will be the first instance of it.
+                Console.Out.WriteLine("[Steamworks.NET] Could not load [lib]steam_api.dll/so/dylib." +
+                                      " It's likely not in the correct location. Refer to the README for more details.\n" +
+                                      e);
+                Exit();
+            }
         }
 
         protected override void Initialize()
@@ -34,6 +56,8 @@ namespace Hello_Steamworks.Net
                 }
                 else
                 {
+                    IsSteamRunning = true;
+
                     SteamUtils.SetOverlayNotificationPosition(ENotificationPosition.k_EPositionBottomRight);
 
                     Exiting += Game1_Exiting;
@@ -93,7 +117,7 @@ namespace Hello_Steamworks.Net
 
             Font = Content.Load<SpriteFont>(@"Font");
 
-            if (SteamAPI.IsSteamRunning())
+            if (IsSteamRunning)
             {
                 // Get your trimmed Steam User Name.
                 string steamUserName = SteamFriends.GetPersonaName();
@@ -112,7 +136,7 @@ namespace Hello_Steamworks.Net
                 Exit();
             }
 
-            if (SteamAPI.IsSteamRunning()) SteamAPI.RunCallbacks();
+            if (IsSteamRunning) SteamAPI.RunCallbacks();
 
             base.Update(gameTime);
         }
@@ -128,7 +152,7 @@ namespace Hello_Steamworks.Net
                     graphics.PreferredBackBufferHeight / 2f - Font.MeasureString(WelcomeMessage).Y / 2f -
                     (SteamAPI.IsSteamRunning() ? 20 : 0)), Color.GreenYellow);
 
-            if (SteamAPI.IsSteamRunning())
+            if (IsSteamRunning)
             {
                 // Draw WelcomeNote.
                 spriteBatch.DrawString(Font, WelcomeNote,

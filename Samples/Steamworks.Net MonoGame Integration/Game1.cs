@@ -13,6 +13,10 @@ namespace Steamworks.Net_MonoGame_Integration
         private readonly GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
+        // Do not use 'SteamApi.IsSteamRunning()'! It's not reliable and slow
+        //see: https://github.com/rlabrecque/Steamworks.NET/issues/30
+        public static bool IsSteamRunning { get; set; } = false;
+
         public SpriteFont Font { get; private set; }
         public int ScreenWidth { get; private set; }
         public int ScreenHeight { get; private set; }
@@ -188,14 +192,15 @@ namespace Steamworks.Net_MonoGame_Integration
             // TODO: Add your initialization logic here
 
             IsMouseVisible = true;
+
             ScreenWidth = graphics.PreferredBackBufferWidth;
             ScreenHeight = graphics.PreferredBackBufferHeight;
-            graphics.SynchronizeWithVerticalRetrace = true;
-            IsFixedTimeStep = false;
 
             Window.Position = new Point(GraphicsDevice.DisplayMode.Width / 2 - graphics.PreferredBackBufferWidth / 2,
                 GraphicsDevice.DisplayMode.Height / 2 - graphics.PreferredBackBufferHeight / 2 - 25);
 
+            graphics.SynchronizeWithVerticalRetrace = true;
+            IsFixedTimeStep = false;
             base.Initialize();
         }
 
@@ -215,6 +220,7 @@ namespace Steamworks.Net_MonoGame_Integration
             else
             {
                 // Steam is running
+                IsSteamRunning = true;
 
                 // It's important that the next call happens AFTER the call to SteamAPI.Init().
                 InitializeCallbacks();
@@ -258,7 +264,7 @@ namespace Steamworks.Net_MonoGame_Integration
 
             // TODO: Add your update logic here
 
-            if (SteamAPI.IsSteamRunning()) SteamAPI.RunCallbacks();
+            if (IsSteamRunning) SteamAPI.RunCallbacks();
             base.Update(gameTime);
         }
 
@@ -270,7 +276,7 @@ namespace Steamworks.Net_MonoGame_Integration
 
             spriteBatch.Begin();
 
-            if (SteamAPI.IsSteamRunning())
+            if (IsSteamRunning)
             {
                 //Draw your Steam Avatar and Steam Name
                 if (UserAvatar != null)

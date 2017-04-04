@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E1300152-A874-46AA-948D-86FBABEF1F6F}</ProjectGuid>
+    <ProjectGuid>{63422818-DBA6-4944-9435-13C217F9B763}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hello_Steamworks.Net.DesktopGL</RootNamespace>
-    <AssemblyName>Hello Steamworks.Net.DesktopGL</AssemblyName>
+    <RootNamespace>Steamworks.Net_MonoGame_Integration</RootNamespace>
+    <AssemblyName>Steamworks.Net MonoGame Integration</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -105,6 +105,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.manifest" />
+    <None Include="MonoGame.Framework.dll.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
