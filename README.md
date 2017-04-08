@@ -74,7 +74,36 @@ private void Game1_Exiting(object sender, EventArgs e)
     SteamAPI.Shutdown();
 }
 ```
+
 > Add the EventHandler **Exiting += Game1_Exiting** and then the SteamAPI.Shutdown() method.
+
+You should be able to build and run the project now. 
+It may be possible that you will receive the following exception:
+
+```js
+An unhandled exception of type 'System.BadImageFormatException' occurred in SWTEST.exe
+
+Additional information: Could not load file or assembly 
+'Steamworks.NET, Version=9.0.0.0, Culture=neutral, PublicKeyToken=null' 
+or one of its dependencies. 
+An attempt was made to load a program with an incorrect format.
+```
+
+In this case you need to make sure, that you took the right assemblies for your target platform. 
+E.g. When you took the assemblies from the repo directory 
+"Steamworks.Net-MonoGame-Integration/Steamworks.NET/Windows-x86/", then you need to configure
+your project to build it for the x86 platform. Use the integrated configuration manager 
+to create or choose the right platform. It will look like this:
+
+![](https://github.com/sqrMin1/Steamworks.Net-MonoGame-Integration/blob/master/Documentation/ConfigurationManager.JPG)
+
+You should also define the right "conditional compilation symbols":
+
+![](https://github.com/sqrMin1/Steamworks.Net-MonoGame-Integration/blob/master/Documentation/ConditionalCompilationSymbols.JPG)
+
+Type in "WINDOWS", when building for the windows platform and "LINUX", when building for linux.
+
+Latest now it should build without an exception.
 
 ## Samples
 
