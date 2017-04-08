@@ -150,7 +150,7 @@ namespace Hello_Steamworks.Net
             spriteBatch.DrawString(Font, WelcomeMessage,
                 new Vector2(graphics.PreferredBackBufferWidth / 2f - Font.MeasureString(WelcomeMessage).X / 2f,
                     graphics.PreferredBackBufferHeight / 2f - Font.MeasureString(WelcomeMessage).Y / 2f -
-                    (SteamAPI.IsSteamRunning() ? 20 : 0)), Color.GreenYellow);
+                    (IsSteamRunning ? 20 : 0)), Color.GreenYellow);
 
             if (IsSteamRunning)
             {
