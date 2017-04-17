@@ -28,6 +28,9 @@ namespace AchievementHunter
         //see: https://github.com/rlabrecque/Steamworks.NET/issues/30
         public static bool IsSteamRunning { get; set; } = false;
 
+        //Error Message: Steam Client not running.
+        private const string STEAM_NOT_RUNNING_ERROR_MESSAGE = "Please start your steam client to receive data!";
+
         // Store screen dimensions.
         public static int ScreenWidth, ScreenHeight;
 
@@ -241,11 +244,11 @@ namespace AchievementHunter
         {
             GraphicsDevice.Clear(Color.Black);
 
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearClamp,
+                DepthStencilState.None, RasterizerState.CullCounterClockwise);
+
             if (IsSteamRunning)
             {
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearClamp, 
-                    DepthStencilState.None, RasterizerState.CullCounterClockwise);
-
                 // WinGame Rectangle
                 spriteBatch.Draw(Pixel, WinGamePosition, Color.Blue);
                 spriteBatch.DrawString(Font, "Win_Game!", new Vector2(
@@ -264,12 +267,18 @@ namespace AchievementHunter
                     ResetAllPosition.X + (ResetAllPosition.Width / 2) - (Font.MeasureString("Reset_ALL!").X / 2),
                     ResetAllPosition.Y + (ResetAllPosition.Height / 2) - (Font.MeasureString("Reset_ALL!").Y / 2)), Color.Black);
 
-                spriteBatch.Draw(ShipTexture, ShipPosition, Color.White);                
+                spriteBatch.Draw(ShipTexture, ShipPosition, Color.White);
 
                 StatsAndAchievements.Draw(spriteBatch);
-
-                spriteBatch.End();
             }
+            else
+            {
+                spriteBatch.DrawString(Font, STEAM_NOT_RUNNING_ERROR_MESSAGE, new Vector2(
+                    (ScreenWidth / 2) - (Font.MeasureString("STEAM_NOT_RUNNING_ERROR_MESSAGE").X / 2),
+                    (ScreenHeight / 2) - (Font.MeasureString("STEAM_NOT_RUNNING_ERROR_MESSAGE").Y / 2)), Color.GreenYellow);
+            }
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
