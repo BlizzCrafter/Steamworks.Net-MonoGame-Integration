@@ -1,20 +1,36 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Steamworks;
 using System;
+using Steamworks;
+using AchievementHunter.Classes;
 
 namespace AchievementHunter
 {
     public class AchievementSample : Game
     {
+        // Enum for possible game states on the client
+        public enum EClientGameState
+        {
+            k_EClientGameWinner,
+            k_EClientGameLoser
+        };
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        KeyboardState oldKeys;
 
         // Do not use 'SteamApi.IsSteamRunning()'! It's not reliable and slow
         //see: https://github.com/rlabrecque/Steamworks.NET/issues/30
         public static bool IsSteamRunning { get; set; } = false;
-        public SpriteFont Font { get; private set; }
+
+        // Store screen dimensions.
+        public static int ScreenWidth, ScreenHeight;
+
+        public static SpriteFont Font { get; private set; }
+
+        private StatsAndAchievements StatsAndAchievements { get; set; }
 
         public AchievementSample()
         {
@@ -50,19 +66,32 @@ namespace AchievementHunter
                 }
                 else
                 {
+                    // Set the "IsSteamRunning" flag to true
                     IsSteamRunning = true;
 
+                    // Set overlay position
                     SteamUtils.SetOverlayNotificationPosition(ENotificationPosition.k_EPositionBottomRight);
 
+                    // Create new stats and achievement object
+                    StatsAndAchievements = new StatsAndAchievements();
+
+                    // Add exiting event to close the steamapi on exit
                     Exiting += Game1_Exiting;
                 }
             }
             catch (DllNotFoundException e)
             {
-                // We check this here as it will be the first instance of it.
+                // We check this here as it will be the first instance of it
                 Console.WriteLine(e);
                 Exit();
             }
+
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.ApplyChanges();
+
+            ScreenWidth = graphics.PreferredBackBufferWidth;
+            ScreenHeight = graphics.PreferredBackBufferHeight;
 
             Window.Position = new Point(GraphicsDevice.DisplayMode.Width / 2 - graphics.PreferredBackBufferWidth / 2,
                 GraphicsDevice.DisplayMode.Height / 2 - graphics.PreferredBackBufferHeight / 2 - 25);
@@ -132,14 +161,46 @@ namespace AchievementHunter
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (IsSteamRunning) SteamAPI.RunCallbacks();
+            if (IsSteamRunning)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.W) && oldKeys.IsKeyUp(Keys.W))
+                {
+                    StatsAndAchievements.OnGameStateChange(EClientGameState.k_EClientGameWinner, gameTime);
+                }
 
+                if (Keyboard.GetState().IsKeyDown(Keys.T) && oldKeys.IsKeyUp(Keys.T))
+                {
+                    StatsAndAchievements.AddDistanceTraveled(100.0f);
+                }
+
+                if (Keyboard.GetState().IsKeyDown(Keys.R) && oldKeys.IsKeyUp(Keys.R))
+                {
+
+                    SteamUserStats.ResetAllStats(true);
+                    SteamUserStats.RequestCurrentStats();
+                    StatsAndAchievements.ResetDistanceTraveled();
+                }
+
+                StatsAndAchievements.Update(gameTime);
+                SteamAPI.RunCallbacks();
+            }
+
+            oldKeys = Keyboard.GetState();
             base.Update(gameTime);
         }
         
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
+
+            if (IsSteamRunning)
+            {
+                spriteBatch.Begin();
+
+                StatsAndAchievements.Draw(spriteBatch);
+
+                spriteBatch.End();
+            }
 
             base.Draw(gameTime);
         }
