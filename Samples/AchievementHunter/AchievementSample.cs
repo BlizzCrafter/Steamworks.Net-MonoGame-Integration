@@ -31,6 +31,9 @@ namespace AchievementHunter
         //Error Message: Steam Client not running.
         private const string STEAM_NOT_RUNNING_ERROR_MESSAGE = "Please start your steam client to receive data!";
 
+        //Description Message: How to control the ship.
+        private const string DESCRIPTION_MESSAGE = "Use [W] [A] [S] [D] to control the ship!";
+
         // Store screen dimensions.
         public static int ScreenWidth, ScreenHeight;
 
@@ -211,10 +214,10 @@ namespace AchievementHunter
 
                 if (ShipPosition.Intersects(ResetAllPosition))
                 {
+                    ResetShip(true);
                     SteamUserStats.ResetAllStats(true);
                     SteamUserStats.RequestCurrentStats();
                     StatsAndAchievements.ResetDistanceTraveled();
-                    ResetShip(true);
                 }
 
                 if (ShipPosition.Intersects(WinGamePosition))
@@ -230,7 +233,6 @@ namespace AchievementHunter
                 }
 
                 #endregion
-
 
                 StatsAndAchievements.Update(gameTime);
                 SteamAPI.RunCallbacks();
@@ -267,15 +269,22 @@ namespace AchievementHunter
                     ResetAllPosition.X + (ResetAllPosition.Width / 2) - (Font.MeasureString("Reset_ALL!").X / 2),
                     ResetAllPosition.Y + (ResetAllPosition.Height / 2) - (Font.MeasureString("Reset_ALL!").Y / 2)), Color.Black);
 
+                // Draw the ship (MonoGame logo)
                 spriteBatch.Draw(ShipTexture, ShipPosition, Color.White);
 
+                // Description
+                spriteBatch.DrawString(Font, DESCRIPTION_MESSAGE, new Vector2(
+                    ScreenWidth - (Font.MeasureString(DESCRIPTION_MESSAGE).X * 2),
+                    ScreenHeight - Font.MeasureString(DESCRIPTION_MESSAGE).Y - 20), Color.GreenYellow);
+                
                 StatsAndAchievements.Draw(spriteBatch);
             }
             else
             {
+                // Error Message
                 spriteBatch.DrawString(Font, STEAM_NOT_RUNNING_ERROR_MESSAGE, new Vector2(
-                    (ScreenWidth / 2) - (Font.MeasureString("STEAM_NOT_RUNNING_ERROR_MESSAGE").X / 2),
-                    (ScreenHeight / 2) - (Font.MeasureString("STEAM_NOT_RUNNING_ERROR_MESSAGE").Y / 2)), Color.GreenYellow);
+                    (ScreenWidth / 2) - (Font.MeasureString(STEAM_NOT_RUNNING_ERROR_MESSAGE).X / 2),
+                    (ScreenHeight / 2) - (Font.MeasureString(STEAM_NOT_RUNNING_ERROR_MESSAGE).Y / 2)), Color.GreenYellow);
             }
 
             spriteBatch.End();
@@ -288,18 +297,10 @@ namespace AchievementHunter
         /// </summary>
         private void ResetShip(bool forceScreenCenter)
         {
-            if (!forceScreenCenter)
-            {
-                ShipPosition = new Rectangle(
-                    (StatsAndAchievements.m_nTotalGamesPlayed > 8 ? 200 : (ScreenWidth / 2) - (ShipTexture.Width / 2)),
-                    (ScreenHeight / 2), ShipTexture.Width, ShipTexture.Height);
-            }
-            else
-            {
-                ShipPosition = new Rectangle(
-                    (ScreenWidth / 2) - (ShipTexture.Width / 2),
-                    (ScreenHeight / 2), ShipTexture.Width, ShipTexture.Height);
-            }
+            ShipPosition = new Rectangle(
+                (StatsAndAchievements.m_nTotalGamesPlayed > 7 && !forceScreenCenter ? 
+                200 : (ScreenWidth / 2) - (ShipTexture.Width / 2)),
+                (ScreenHeight / 2), ShipTexture.Width, ShipTexture.Height);
         }
     }
 }
