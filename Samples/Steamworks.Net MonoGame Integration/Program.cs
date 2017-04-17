@@ -13,7 +13,7 @@ namespace Steamworks.Net_MonoGame_Integration.DesktopGL
         [STAThread]
         static void Main()
         {
-            using (var game = new Game1())
+            using (var game = new SteamworksIntegration())
                 game.Run();
         }
     }

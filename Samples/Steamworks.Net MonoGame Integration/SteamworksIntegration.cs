@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Steamworks.Net_MonoGame_Integration
 {
-    public class Game1 : Game
+    public class SteamworksIntegration : Game
     {
         private readonly GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
@@ -154,7 +154,7 @@ namespace Steamworks.Net_MonoGame_Integration
                 $"[{PersonaStateChange_t.k_iCallback} - PersonaStateChange] - {pCallback.m_ulSteamID} -- {pCallback.m_nChangeFlags}";
         }
 
-        public Game1()
+        public SteamworksIntegration()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";

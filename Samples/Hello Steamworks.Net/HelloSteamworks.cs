@@ -6,7 +6,7 @@ using Steamworks;
 
 namespace Hello_Steamworks.Net
 {
-    public class Game1 : Game
+    public class HelloSteamworks : Game
     {
         private readonly GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
@@ -22,7 +22,7 @@ namespace Hello_Steamworks.Net
         //see: https://github.com/rlabrecque/Steamworks.NET/issues/30
         public static bool IsSteamRunning { get; set; } = false;
 
-        public Game1()
+        public HelloSteamworks()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
