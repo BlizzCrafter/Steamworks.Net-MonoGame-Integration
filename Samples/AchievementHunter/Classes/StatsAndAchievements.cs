@@ -70,12 +70,11 @@ namespace AchievementHunter.Classes
         private float m_flGameFeetTraveled;
 
         // Persisted Stat details
-        private int m_nTotalGamesPlayed;
+        public int m_nTotalGamesPlayed;
         private int m_nTotalNumWins;
         private int m_nTotalNumLosses;
         private float m_flTotalFeetTraveled;
         private float m_flMaxFeetTraveled;
-        private float m_flAverageSpeed;
 
         protected Callback<UserStatsReceived_t> m_UserStatsReceived;
         protected Callback<UserStatsStored_t> m_UserStatsStored;
@@ -340,7 +339,7 @@ Achieved: {m_Achievements[i].m_bAchieved}";
         /// Game state has changed (We use this to reset all achievements so we can test the unlocking of them again).
         /// </summary>
         /// <param name="eNewState"></param>
-        public void OnGameStateChange(AchievementSample.EClientGameState eNewState, GameTime gT)
+        public void OnGameStateChange(AchievementSample.EClientGameState eNewState)
         {
             if (!m_bStatsValid)
                 return;

@@ -19,6 +19,9 @@ namespace AchievementHunter
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Rectangle ShipPosition, WinGamePosition, LoseGamePosition, ResetAllPosition;
+        Texture2D ShipTexture, Pixel;
+
         KeyboardState oldKeys;
 
         // Do not use 'SteamApi.IsSteamRunning()'! It's not reliable and slow
@@ -86,6 +89,9 @@ namespace AchievementHunter
                 Exit();
             }
 
+            IsFixedTimeStep = true;
+            graphics.SynchronizeWithVerticalRetrace = true;
+
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
             graphics.ApplyChanges();
@@ -140,6 +146,16 @@ namespace AchievementHunter
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             Font = Content.Load<SpriteFont>(@"Font");
+            ShipTexture = Content.Load<Texture2D>(@"Ship");
+
+            ResetShip(true);
+
+            WinGamePosition = new Rectangle(20, ScreenHeight / 2, 150, 150);
+            LoseGamePosition = new Rectangle(20, (ScreenHeight / 2) + 180, 150, 150);
+            ResetAllPosition = new Rectangle((ScreenWidth / 2) - 75, 20, 150, 150);
+
+            Pixel = new Texture2D(GraphicsDevice, 1, 1);
+            Pixel.SetData(new[] { Color.White });
 
             if (IsSteamRunning)
             {
@@ -163,23 +179,55 @@ namespace AchievementHunter
 
             if (IsSteamRunning)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.W) && oldKeys.IsKeyUp(Keys.W))
+                #region ShipMovement
+
+                if (Keyboard.GetState().IsKeyDown(Keys.W))
                 {
-                    StatsAndAchievements.OnGameStateChange(EClientGameState.k_EClientGameWinner, gameTime);
+                    ShipPosition.Y = MathHelper.Clamp(ShipPosition.Y - 5, 0, ScreenHeight);
+                    StatsAndAchievements.AddDistanceTraveled(3.0f);
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.A))
+                {
+                    ShipPosition.X = MathHelper.Clamp(ShipPosition.X - 5, 0, ScreenWidth);
+                    StatsAndAchievements.AddDistanceTraveled(3.0f);
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.S))
+                {
+                    ShipPosition.Y = MathHelper.Clamp(ShipPosition.Y + 5, 0, ScreenHeight - ShipTexture.Height);
+                    StatsAndAchievements.AddDistanceTraveled(3.0f);
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.D))
+                {
+                    ShipPosition.X = MathHelper.Clamp(ShipPosition.X + 5, 0, ScreenWidth - ShipTexture.Width);
+                    StatsAndAchievements.AddDistanceTraveled(3.0f);
                 }
 
-                if (Keyboard.GetState().IsKeyDown(Keys.T) && oldKeys.IsKeyUp(Keys.T))
-                {
-                    StatsAndAchievements.AddDistanceTraveled(100.0f);
-                }
+                #endregion
 
-                if (Keyboard.GetState().IsKeyDown(Keys.R) && oldKeys.IsKeyUp(Keys.R))
-                {
+                #region ShipCollisionDetection
 
+                if (ShipPosition.Intersects(ResetAllPosition))
+                {
                     SteamUserStats.ResetAllStats(true);
                     SteamUserStats.RequestCurrentStats();
                     StatsAndAchievements.ResetDistanceTraveled();
+                    ResetShip(true);
                 }
+
+                if (ShipPosition.Intersects(WinGamePosition))
+                {
+                    ResetShip(false);
+                    StatsAndAchievements.OnGameStateChange(EClientGameState.k_EClientGameWinner);
+                }
+
+                if (ShipPosition.Intersects(LoseGamePosition))
+                {
+                    ResetShip(false);
+                    StatsAndAchievements.OnGameStateChange(EClientGameState.k_EClientGameLoser);
+                }
+
+                #endregion
+
 
                 StatsAndAchievements.Update(gameTime);
                 SteamAPI.RunCallbacks();
@@ -195,7 +243,28 @@ namespace AchievementHunter
 
             if (IsSteamRunning)
             {
-                spriteBatch.Begin();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearClamp, 
+                    DepthStencilState.None, RasterizerState.CullCounterClockwise);
+
+                // WinGame Rectangle
+                spriteBatch.Draw(Pixel, WinGamePosition, Color.Blue);
+                spriteBatch.DrawString(Font, "Win_Game!", new Vector2(
+                    WinGamePosition.X + (WinGamePosition.Width / 2) - (Font.MeasureString("Win_Game!").X / 2),
+                    WinGamePosition.Y + (WinGamePosition.Height / 2) - (Font.MeasureString("Win_Game!").Y / 2)), Color.White);
+
+                // LoseGame Rectangle
+                spriteBatch.Draw(Pixel, LoseGamePosition, Color.Red);
+                spriteBatch.DrawString(Font, "Lose_Game!", new Vector2(
+                    LoseGamePosition.X + (LoseGamePosition.Width / 2) - (Font.MeasureString("Lose_Game!").X / 2),
+                    LoseGamePosition.Y + (LoseGamePosition.Height / 2) - (Font.MeasureString("Lose_Game!").Y / 2)), Color.White);
+
+                // ResetAll Rectangle
+                spriteBatch.Draw(Pixel, ResetAllPosition, Color.Yellow);
+                spriteBatch.DrawString(Font, "Reset_ALL!", new Vector2(
+                    ResetAllPosition.X + (ResetAllPosition.Width / 2) - (Font.MeasureString("Reset_ALL!").X / 2),
+                    ResetAllPosition.Y + (ResetAllPosition.Height / 2) - (Font.MeasureString("Reset_ALL!").Y / 2)), Color.Black);
+
+                spriteBatch.Draw(ShipTexture, ShipPosition, Color.White);                
 
                 StatsAndAchievements.Draw(spriteBatch);
 
@@ -203,6 +272,25 @@ namespace AchievementHunter
             }
 
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// Reset the ship to the screen center.
+        /// </summary>
+        private void ResetShip(bool forceScreenCenter)
+        {
+            if (!forceScreenCenter)
+            {
+                ShipPosition = new Rectangle(
+                    (StatsAndAchievements.m_nTotalGamesPlayed > 8 ? 200 : (ScreenWidth / 2) - (ShipTexture.Width / 2)),
+                    (ScreenHeight / 2), ShipTexture.Width, ShipTexture.Height);
+            }
+            else
+            {
+                ShipPosition = new Rectangle(
+                    (ScreenWidth / 2) - (ShipTexture.Width / 2),
+                    (ScreenHeight / 2), ShipTexture.Width, ShipTexture.Height);
+            }
         }
     }
 }
