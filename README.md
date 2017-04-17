@@ -107,8 +107,9 @@ Latest now it should build without an exception.
 
 ## Samples
 
-- **Hello Steamworks.Net.csproj**: Simple sample which sets up bare basics of Steamworks.Net and displaying a welcome message which includes your steam user name.
-- **Steamworks.Net MonoGame Integration.csproj**: Extendend sample which shows some features of Steamworks.Net like UserStats, PersonaState, LeaderboardData, NumberOfCurrentPlayers, Steam User Avatar and so on.
+- **Hello Steamworks.Net**: Simple sample which sets up bare basics of Steamworks.Net and displaying a welcome message which includes your steam user name.
+- **AchievementHunter**: Simple sample which shows you the correct way of implementing achievements and stats as well as storing them on the steam server. It's based upon the Steamworks Example 'SpaceWar' included with the Steamworks SDK. 
+- **Steamworks.Net MonoGame Integration**: Extendend sample which shows some features of Steamworks.Net like UserStats, PersonaState, LeaderboardData, NumberOfCurrentPlayers, Steam User Avatar and so on.
 
 > Note: You need to start your steam client before executing the examples. Otherwise you won't receive any data -obviously ;)
 
