@@ -2,7 +2,7 @@
 This repo is for everyone who is about to integrate the Steamworks.Net.dll into a MonoGame project. It shows some Steamworks.Net features and how easy it is to integrate it into a MonoGame project.
 
 ![HelloSteamworks](Documentation/MonoGameSteamworksNet_03.jpg)
-![HelloSteamworks](Documentation/MonoGameSteamworksNet_05.jpg)
+![HelloSteamworks](Documentation/MonoGameSteamworksNet_02.png)
 
 ### Building
 
