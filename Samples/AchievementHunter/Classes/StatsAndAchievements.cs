@@ -290,15 +290,7 @@ namespace AchievementHunter.Classes
         public void Draw(SpriteBatch sB)
         {
             if (!AchievementSample.IsSteamRunning)
-            {
-                string errorMessage = "Error: Please start your Steam Client before you run this example!";
-
-                sB.DrawString(AchievementSample.Font, errorMessage, new Vector2(
-                        AchievementSample.ScreenWidth / 2f - AchievementSample.Font.MeasureString(errorMessage).X / 2f,
-                        AchievementSample.ScreenHeight / 2f - AchievementSample.Font.MeasureString(errorMessage).Y / 2f), 
-                        Color.GreenYellow);
                 return;
-            }
 
             string stats = $@"
 DistanceTraveled: {m_flGameFeetTraveled}
