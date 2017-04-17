@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hello Steamworks.Net", "Sam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steamworks.Net MonoGame Integration", "Samples\Steamworks.Net MonoGame Integration\Steamworks.Net MonoGame Integration.csproj", "{63422818-DBA6-4944-9435-13C217F9B763}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AchievementHunter", "Samples\AchievementHunter\AchievementHunter.csproj", "{DD842683-2485-407C-945D-DB80167A99F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,30 @@ Global
 		{63422818-DBA6-4944-9435-13C217F9B763}.Windows|x64.Build.0 = Release|x86
 		{63422818-DBA6-4944-9435-13C217F9B763}.Windows|x86.ActiveCfg = Release|x86
 		{63422818-DBA6-4944-9435-13C217F9B763}.Windows|x86.Build.0 = Release|x86
+		{DD842683-2485-407C-945D-DB80167A99F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Debug|x64.Build.0 = Debug|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Debug|x86.Build.0 = Debug|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.OSX-Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.OSX-Linux|Any CPU.Build.0 = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.OSX-Linux|x64.ActiveCfg = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.OSX-Linux|x64.Build.0 = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.OSX-Linux|x86.ActiveCfg = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.OSX-Linux|x86.Build.0 = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Release|x64.ActiveCfg = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Release|x64.Build.0 = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Release|x86.ActiveCfg = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Release|x86.Build.0 = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Windows|Any CPU.ActiveCfg = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Windows|Any CPU.Build.0 = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Windows|x64.ActiveCfg = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Windows|x64.Build.0 = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Windows|x86.ActiveCfg = Release|Any CPU
+		{DD842683-2485-407C-945D-DB80167A99F5}.Windows|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
