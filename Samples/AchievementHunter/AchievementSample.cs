@@ -288,10 +288,13 @@ namespace AchievementHunter
         /// </summary>
         private void ResetShip(bool forceScreenCenter)
         {
-            ShipPosition = new Rectangle(
-                (StatsAndAchievements.m_nTotalGamesPlayed > 7 && !forceScreenCenter ? 
-                200 : (ScreenWidth / 2) - (ShipTexture.Width / 2)),
-                (ScreenHeight / 2), ShipTexture.Width, ShipTexture.Height);
+            if (IsSteamRunning && StatsAndAchievements != null)
+            {
+                ShipPosition = new Rectangle(
+                    (StatsAndAchievements.m_nTotalGamesPlayed > 7 && !forceScreenCenter ?
+                    200 : (ScreenWidth / 2) - (ShipTexture.Width / 2)),
+                    (ScreenHeight / 2), ShipTexture.Width, ShipTexture.Height);
+            }
         }
     }
 }
