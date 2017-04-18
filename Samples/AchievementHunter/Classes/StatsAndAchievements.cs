@@ -210,7 +210,7 @@ namespace AchievementHunter.Classes
             m_bStatsValid = false;
         }
 
-        public void Update(GameTime gT)
+        public void Update()
         {
             if (!m_bRequestedStats)
             {

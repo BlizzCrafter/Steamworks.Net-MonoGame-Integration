@@ -225,7 +225,7 @@ namespace AchievementHunter
 
                 #endregion
 
-                StatsAndAchievements.Update(gameTime);
+                StatsAndAchievements.Update();
                 SteamAPI.RunCallbacks();
             }
 
