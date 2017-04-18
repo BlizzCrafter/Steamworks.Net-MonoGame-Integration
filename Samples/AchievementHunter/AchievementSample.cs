@@ -162,15 +162,6 @@ namespace AchievementHunter
 
             Pixel = new Texture2D(GraphicsDevice, 1, 1);
             Pixel.SetData(new[] { Color.White });
-
-            if (IsSteamRunning)
-            {
-                // Get your trimmed Steam User Name.
-                string steamUserName = SteamFriends.GetPersonaName();
-                // Remove unsupported chars like emojis or other stuff our font cannot handle.
-                steamUserName = ReplaceUnsupportedChars(Font, steamUserName);
-                var userNameTrimmed = steamUserName.Trim();
-            }
         }
         
         protected override void UnloadContent()
