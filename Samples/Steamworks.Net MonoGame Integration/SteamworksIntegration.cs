@@ -45,7 +45,7 @@ namespace Steamworks.Net_MonoGame_Integration
         private Texture2D GetSteamUserAvatar(GraphicsDevice device)
         {
             // Get the icon type as a integer.
-            var icon = SteamFriends.GetLargeFriendAvatar(SteamUser.GetSteamID());
+            var icon = SteamFriends.GetMediumFriendAvatar(SteamUser.GetSteamID());
 
             // Check if we got an icon type.
             if (icon != 0)
