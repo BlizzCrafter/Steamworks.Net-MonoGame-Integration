@@ -11,7 +11,7 @@ This repo is for everyone who is about to integrate the Steamworks.Net.dll into 
 The following is required to successfully compile the solution:
 
 - MonoGame 3.6
-- [Steamworks.Net](https://github.com/rlabrecque/Steamworks.NET) Precompiled .dlls are included in this repo. They are targeting **Steam SDK 1.40** (Steamworks.Net 10.0.0)
+- [Steamworks.Net](https://github.com/rlabrecque/Steamworks.NET) Precompiled .dlls are included in this repo. They are targeting **Steam SDK 1.41** (Steamworks.Net 11.0.0)
 
 ### How To
 
@@ -19,7 +19,8 @@ To set up your own MonoGame with Steamworks.Net integration project you need to 
 
 - Add the **Steamworks.Net.dll** as a reference
 
-- Add **CSteamworks.dll** as a new file to the project and set "copy to output directory" to "copy if newer"
+- ~~Add **CSteamworks.dll** as a new file to the project and set "copy to output directory" to "copy if newer"~~
+- **No** longer requires **CSteamworks.dll**!
 
 - Add **steam_api.dll** as a new file to the project and set "copy to output directory" to "copy if newer"
 
