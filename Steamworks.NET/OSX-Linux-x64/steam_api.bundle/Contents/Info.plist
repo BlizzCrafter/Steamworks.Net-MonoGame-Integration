@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>CSteamworks</string>
+	<string>libsteam_api.dylib</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.rileylabrecque.CSteamworks</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -17,7 +17,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.30</string>
+	<string>1.31</string>
 	<key>CSResourcesFileMapped</key>
 	<string>yes</string>
 	<key>DTCompiler</key>
