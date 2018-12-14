@@ -1,4 +1,4 @@
-[![Twitter Follow](https://img.shields.io/twitter/follow/sqrMin1.svg?style=social&label=Follow)](https://twitter.com/sqrMin1)
+[![Twitter Follow](https://img.shields.io/twitter/follow/SandboxBlizz.svg?style=social&label=Follow)](https://twitter.com/SandboxBlizz)
 
 # Steamworks.Net MonoGame Integration
 This repo is for everyone who is about to integrate the Steamworks.Net.dll into a MonoGame project. It shows some Steamworks.Net features and how easy it is to integrate it into a MonoGame project.
@@ -113,4 +113,4 @@ Latest now it should build without an exception.
 
 **Have fun!**
 
-[![Twitter Follow](https://img.shields.io/twitter/follow/sqrMin1.svg?style=social&label=Follow)](https://twitter.com/sqrMin1)
+[![Twitter Follow](https://img.shields.io/twitter/follow/SandboxBlizz.svg?style=social&label=Follow)](https://twitter.com/SandboxBlizz)
