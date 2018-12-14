@@ -8,7 +8,8 @@ Steam Logo
 
 The MIT License (MIT)
 
-Steamworks.Net Copyright (c) 2013-2017 Riley Labrecque
+Steamworks.Net Copyright (c) 2013-2018 Riley Labrecque
+MonoGame implementation Copyright (c) 2018 Marcel Härtel
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -121,7 +122,7 @@ THE SOFTWARE.
 
 Steam Logo Copyright
 
-© 2017 Valve Corporation. All rights reserved. Valve, the Valve logo, 
+© 2018 Valve Corporation. All rights reserved. Valve, the Valve logo, 
 Half-Life, the Half-Life logo, the Lambda logo, Steam, the Steam logo, 
 Team Fortress, the Team Fortress logo, Opposing Force, Day of Defeat, 
 the Day of Defeat logo, Counter-Strike, the Counter-Strike logo, Source, 
